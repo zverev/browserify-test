@@ -1,29 +1,35 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
+'use strict';
+
 var browserify = require('browserify');
-var parcelify = require('parcelify');
 var watchify = require('watchify');
+var source = require('vinyl-source-stream');
+var gutil = require('gulp-util');
+var gulp = require('gulp');
+var _ = require('lodash');
 
-gulp.task('default', function() {
-    var b = browserify();
-    var p = parcelify(b, {});
-    p.on('done', function() {
-        gutil.log('parcelify done');
-    });
+gulp.task('js', function() {
+    var b = watchify(browserify({
+        entries: ['./app/entry.js'],
+        debug: true
+    }));
 
-    p.on('error', function(err) {
-        gutil.log('parcelify error');
-    });
+    // add transformations here
+    // i.e. b.transform(coffeeify);
 
-    p.on('packageCreated', function(package) {
-        gutil.log('parcelify package created');
-        console.log(package.getAssets());
-    });
+    function bundle() {
+        return b.bundle()
+            // log errors if they happen
+            .on('error', function() {
+                gutil.log('error')
+            })
+            .pipe(source('bundle.js'))
+            .pipe(gulp.dest('./dist'));
+    }
 
-    p.on('assetUpdated', function(eventType, asset) {
-        gutil.log('parcelify asset updated');
-    });
+    b.on('update', bundle); // on any dep update, runs the bundler
+    b.on('log', gutil.log); // output build logs to terminal
 
-    b.add('./app/entry.js');
-    b.bundle();
+    bundle();
 });
+
+gulp.task('default', ['js']);
