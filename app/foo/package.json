@@ -1,3 +1,4 @@
 {
-    "main": "main.js"
+    "main": "main.js",
+    "style": "styles.css"
 }

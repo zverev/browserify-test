@@ -1,17 +1,48 @@
 'use strict';
 
 var browserify = require('browserify');
+var parcelMap = require('parcel-map');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
+var concat = require('gulp-concat');
 var gutil = require('gulp-util');
+var path = require('path');
 var gulp = require('gulp');
+var es = require('event-stream');
 var _ = require('lodash');
 
+var browserifyConfig = {
+    entries: ['./app/entry.js'],
+    debug: true
+};
+
+function getCssAssets(cb) {
+    var b = browserify(browserifyConfig);
+
+    var opts = {
+        keys: ['style'],
+        defaults: {
+            style: 'images/*.jpg'
+        }
+    };
+
+    var ee = parcelMap(b, opts);
+
+    ee.on('done', function(graph) {
+        var cssFilesPaths = [];
+        for (var assetPath in graph.assets) {
+            if (assetPath.match(/.css$/)) {
+                cssFilesPaths.push(path.normalize(assetPath));
+            }
+        }
+        cb(cssFilesPaths);
+    });
+
+    b.bundle();
+}
+
 gulp.task('js', function() {
-    var b = watchify(browserify({
-        entries: ['./app/entry.js'],
-        debug: true
-    }));
+    var b = watchify(browserify(browserifyConfig));
 
     // add transformations here
     // i.e. b.transform(coffeeify);
@@ -31,5 +62,14 @@ gulp.task('js', function() {
 
     bundle();
 });
+
+gulp.task('css', function(cb) {
+    getCssAssets(function(cssFilePaths) {
+        gulp.src(cssFilesPaths)
+            .pipe(concat('bundle.css'))
+            .pipe(gulp.dest('dist'))
+            .pipe(es.through(null, cb))
+    });
+})
 
 gulp.task('default', ['js']);
