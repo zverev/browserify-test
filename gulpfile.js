@@ -41,7 +41,7 @@ function getCssAssets(cb) {
     b.bundle();
 }
 
-gulp.task('js', function() {
+gulp.task('watchjs', function() {
     var b = watchify(browserify(browserifyConfig));
 
     // add transformations here
@@ -64,12 +64,22 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function(cb) {
-    getCssAssets(function(cssFilePaths) {
+    getCssAssets(function(cssFilesPaths) {
         gulp.src(cssFilesPaths)
             .pipe(concat('bundle.css'))
             .pipe(gulp.dest('dist'))
-            .pipe(es.through(null, cb))
+            .pipe(es.through(null, function() {
+                gutil.log('css built');
+                cb();
+            }));
     });
-})
+});
 
-gulp.task('default', ['js']);
+gulp.task('watchcss', ['css'], function(cb) {
+    getCssAssets(function(cssFilesPaths) {
+        gulp.watch(cssFilesPaths, ['css']);
+        cb();
+    });
+});
+
+gulp.task('default', ['watchjs', 'watchcss']);
