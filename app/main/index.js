@@ -1,5 +1,5 @@
-var foo = require('../foo')
-
+var foo = require('../foo');
+require('../cssUrlsTest');
 console.log(foo);
 
 var L = require('leaflet');
