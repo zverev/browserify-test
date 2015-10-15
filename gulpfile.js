@@ -1,15 +1,19 @@
 'use strict';
 
+var vinylSourceStream = require('vinyl-source-stream');
 var browserify = require('browserify');
 var parcelMap = require('parcel-map');
 var watchify = require('watchify');
-var source = require('vinyl-source-stream');
-var concat = require('gulp-concat');
 var gutil = require('gulp-util');
 var path = require('path');
-var gulp = require('gulp');
 var es = require('event-stream');
 var _ = require('lodash');
+
+var gulpFileAssets = require('gulp-file-assets');
+// var gulpReplace = require('gulp-replace');
+var gulpRename = require('gulp-rename');
+var gulpConcat = require('gulp-concat');
+var gulp = require('gulp');
 
 var browserifyConfig = {
     entries: ['./app/entry.js'],
@@ -41,7 +45,7 @@ function getCssAssets(cb) {
     b.bundle();
 }
 
-gulp.task('js', function() {
+gulp.task('watchjs', function() {
     var b = watchify(browserify(browserifyConfig));
 
     // add transformations here
@@ -53,7 +57,7 @@ gulp.task('js', function() {
             .on('error', function() {
                 gutil.log('error')
             })
-            .pipe(source('bundle.js'))
+            .pipe(vinylSourceStream('bundle.js'))
             .pipe(gulp.dest('./dist'));
     }
 
@@ -64,12 +68,36 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function(cb) {
-    getCssAssets(function(cssFilePaths) {
-        gulp.src(cssFilesPaths)
-            .pipe(concat('bundle.css'))
-            .pipe(gulp.dest('dist'))
-            .pipe(es.through(null, cb))
-    });
-})
+    getCssAssets(function(cssFilesPaths) {
+        var urlsStreams = cssFilesPaths.map(function(cssFilesPath) {
+            return gulp.src(cssFilesPath)
+                .pipe(gulpFileAssets())
+                .pipe(gulpRename(function(pth) {
+                    pth.dirname = path.relative(
+                        __dirname,
+                        path.join(path.dirname(cssFilesPath), pth.dirname)
+                    );
+                }))
+                .pipe(gulp.dest('dist'));
+        });
 
-gulp.task('default', ['js']);
+        var cssStream = gulp.src(cssFilesPaths)
+            // .pipe(gulpReplace(/url\(['"]?(.*)['"]?\)/ig, function(search, file) {
+            //     console.log(arguments.length);
+            // }))
+            .pipe(gulpConcat('bundle.css'))
+            .pipe(gulp.dest('dist'));
+
+        es.merge.apply(null, [].concat(urlsStreams, cssStream))
+            .pipe(es.through(null, cb));
+    });
+});
+
+gulp.task('watchcss', ['css'], function(cb) {
+    getCssAssets(function(cssFilesPaths) {
+        gulp.watch(cssFilesPaths, ['css']);
+        cb();
+    });
+});
+
+gulp.task('default', ['watchjs', 'watchcss']);

@@ -14,13 +14,15 @@
   "license": "ISC",
   "dependencies": {
     "jquery": "^2.1.4",
-    "leaflet": "leaflet/leaflet#v0.7.5"
+    "leaflet": "0.7.5"
   },
   "devDependencies": {
     "browserify": "^11.2.0",
     "event-stream": "^3.3.1",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
+    "gulp-file-assets": "^1.0.4",
+    "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.6",
     "lodash": "^3.10.1",
     "parcel-map": "^3.0.0",
