@@ -1,34 +1,22 @@
 {
-  "name": "browserify-test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "watchify ./app/entry.js -v -o dist/bundle.js -p [ parcelify -wo dist/bundle.css ]"
-  },
-  "style": [
-    "./node_modules/leaflet/dist/leaflet.css"
-  ],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "jquery": "^2.1.4",
-    "leaflet": "0.7.5"
-  },
-  "devDependencies": {
-    "browserify": "^11.2.0",
-    "event-stream": "^3.3.1",
-    "gulp": "^3.9.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-file-assets": "^1.0.4",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.4",
-    "gulp-util": "^3.0.6",
-    "lodash": "^3.10.1",
-    "parcel-map": "^3.0.0",
-    "parcelify": "^2.1.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.4.0"
-  }
+    "name": "browserify-test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "watchify ./app/entry.js -v -o dist/bundle.js -p [ parcelify -wo dist/bundle.css ]"
+    },
+    "style": [
+        "./node_modules/leaflet/dist/leaflet.css"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "jquery": "^2.1.4",
+        "leaflet": "0.7.5"
+    },
+    "devDependencies": {
+        "gulp": "^3.9.0"
+    }
 }

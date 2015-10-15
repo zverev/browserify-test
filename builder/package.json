@@ -1,0 +1,19 @@
+{
+    "name": "gmx-builder",
+    "version": "1.0.0",
+    "dependencies": {
+        "browserify": "^11.2.0",
+        "event-stream": "^3.3.1",
+        "gulp": "^3.9.0",
+        "gulp-concat": "^2.6.0",
+        "gulp-file-assets": "^1.0.4",
+        "gulp-rename": "^1.2.2",
+        "gulp-replace": "^0.5.4",
+        "gulp-util": "^3.0.6",
+        "lodash": "^3.10.1",
+        "parcel-map": "^3.0.0",
+        "parcelify": "^2.1.0",
+        "vinyl-source-stream": "^1.1.0",
+        "watchify": "^3.4.0"
+    }
+}
