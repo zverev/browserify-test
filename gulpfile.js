@@ -10,7 +10,7 @@ var es = require('event-stream');
 var _ = require('lodash');
 
 var gulpFileAssets = require('gulp-file-assets');
-// var gulpReplace = require('gulp-replace');
+var gulpReplace = require('gulp-replace');
 var gulpRename = require('gulp-rename');
 var gulpConcat = require('gulp-concat');
 var gulp = require('gulp');
@@ -69,22 +69,30 @@ gulp.task('watchjs', function() {
 
 gulp.task('css', function(cb) {
     getCssAssets(function(cssFilesPaths) {
-        var urlsStreams = cssFilesPaths.map(function(cssFilesPath) {
-            return gulp.src(cssFilesPath)
+        var urlsStreams = cssFilesPaths.map(function(cssFilePath) {
+            return gulp.src(cssFilePath)
                 .pipe(gulpFileAssets())
                 .pipe(gulpRename(function(pth) {
                     pth.dirname = path.relative(
                         __dirname,
-                        path.join(path.dirname(cssFilesPath), pth.dirname)
+                        path.join(path.dirname(cssFilePath), pth.dirname)
                     );
                 }))
                 .pipe(gulp.dest('dist'));
         });
 
-        var cssStream = gulp.src(cssFilesPaths)
-            // .pipe(gulpReplace(/url\(['"]?(.*)['"]?\)/ig, function(search, file) {
-            //     console.log(arguments.length);
-            // }))
+        var cssStreams = cssFilesPaths.map(function(cssFilePath) {
+            return gulp.src(cssFilePath)
+                .pipe(gulpReplace(/url\(['"]?(.*)['"]?\)/ig, function(match, p1, offset, str) {
+                    var pth = path.relative(
+                        __dirname,
+                        path.join(path.dirname(cssFilePath), p1)
+                    );
+                    return 'url(\'' + pth + '\')';
+                }))
+        });
+
+        var cssStream = es.merge.apply(null, cssStreams)
             .pipe(gulpConcat('bundle.css'))
             .pipe(gulp.dest('dist'));
 

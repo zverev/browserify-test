@@ -23,6 +23,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-file-assets": "^1.0.4",
     "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
     "gulp-util": "^3.0.6",
     "lodash": "^3.10.1",
     "parcel-map": "^3.0.0",
