@@ -85,12 +85,12 @@ module.exports = function(gulp, options) {
 
             var cssStreams = cssFilesPaths.map(function(cssFilePath) {
                 return gulp.src(cssFilePath)
-                    .pipe(gulpReplace(/url\(['"]?(.*)['"]?\)/ig, function(match, p1, offset, str) {
+                    .pipe(gulpReplace(/url\(['"]*([^\'\"\)]*)['"]*\)/ig, function(match, p1, offset, str) {
                         var pth = path.relative(
                             options.cwd,
                             path.join(path.dirname(cssFilePath), p1)
                         );
-                        return 'url(\'' + pth + '\')';
+                        return 'url(\'' + pth.replace(/\\/ig, '/') + '\')';
                     }))
             });
 
