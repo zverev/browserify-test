@@ -76,7 +76,7 @@ module.exports = function(gulp, options) {
                     .pipe(gulpFileAssets())
                     .pipe(gulpRename(function(pth) {
                         pth.dirname = path.relative(
-                            __dirname,
+                            options.cwd,
                             path.join(path.dirname(cssFilePath), pth.dirname)
                         );
                     }))
@@ -87,7 +87,7 @@ module.exports = function(gulp, options) {
                 return gulp.src(cssFilePath)
                     .pipe(gulpReplace(/url\(['"]?(.*)['"]?\)/ig, function(match, p1, offset, str) {
                         var pth = path.relative(
-                            __dirname,
+                            options.cwd,
                             path.join(path.dirname(cssFilePath), p1)
                         );
                         return 'url(\'' + pth + '\')';
