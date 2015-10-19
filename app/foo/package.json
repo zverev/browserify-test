@@ -1,4 +1,12 @@
 {
-    "main": "main.js",
-    "style": "styles.css"
+  "main": "main.js",
+  "style": "styles.css",
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
+  },
+  "devDependencies": {
+    "brfs": "^1.4.1"
+  }
 }
