@@ -1,3 +1,0 @@
-[submodule "external/Leaflet-GeoMixer"]
-	path = external/Leaflet-GeoMixer
-	url = git@github.com:zverev/Leaflet-GeoMixer.git
