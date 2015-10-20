@@ -15,9 +15,16 @@ var gulpRename = require('gulp-rename');
 var gulpConcat = require('gulp-concat');
 var gulp = require('gulp');
 
-function getCssAssets(browserifyConfig, cb) {
-    var b = browserify(browserifyConfig);
+function browserifyFactory(config) {
+    var br = browserify({
+        entries: config.entries,
+        debug: true
+    });
 
+    return br;
+}
+
+function getCssAssets(brInstance, cb) {
     var opts = {
         keys: ['style'],
         defaults: {
@@ -25,7 +32,7 @@ function getCssAssets(browserifyConfig, cb) {
         }
     };
 
-    var ee = parcelMap(b, opts);
+    var ee = parcelMap(brInstance, opts);
 
     ee.on('done', function(graph) {
         var cssFilesPaths = [];
@@ -37,18 +44,13 @@ function getCssAssets(browserifyConfig, cb) {
         cb(cssFilesPaths);
     });
 
-    b.bundle();
+    brInstance.bundle();
 }
 
 // options.entries - browserify files
 module.exports = function(gulp, options) {
-    var browserifyConfig = {
-        entries: options.entries,
-        debug: true
-    };
-
     gulp.task('watchjs', function() {
-        var b = watchify(browserify(browserifyConfig));
+        var b = watchify(browserifyFactory(options));
 
         // add transformations here
         // i.e. b.transform(coffeeify);
@@ -70,7 +72,7 @@ module.exports = function(gulp, options) {
     });
 
     gulp.task('css', function(cb) {
-        getCssAssets(browserifyConfig, function(cssFilesPaths) {
+        getCssAssets(browserifyFactory(options), function(cssFilesPaths) {
             var urlsStreams = cssFilesPaths.map(function(cssFilePath) {
                 return gulp.src(cssFilePath)
                     .pipe(gulpFileAssets())
@@ -104,7 +106,7 @@ module.exports = function(gulp, options) {
     });
 
     gulp.task('watchcss', ['css'], function(cb) {
-        getCssAssets(browserifyConfig, function(cssFilesPaths) {
+        getCssAssets(browserifyFactory(options), function(cssFilesPaths) {
             gulp.watch(cssFilesPaths, ['css']);
             cb();
         });
