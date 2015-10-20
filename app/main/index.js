@@ -1,6 +1,6 @@
 var foo = require('../foo');
 require('../cssUrlsTest');
-console.log(foo);
+var lGmx = require('../../external/Leaflet-GeoMixer');
 
 var L = require('leaflet');
 
@@ -36,4 +36,12 @@ window.addEventListener('load', function() {
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+
+    lGmx.loadMap('37TYY').then(function(gmxMap) {
+        for (var i = 0; i < gmxMap.layers.length; i++) {
+            map.addLayer(gmxMap.layers[i]);
+        }
+    }, function(err) {
+        console.error('error', err);
+    });
 });
