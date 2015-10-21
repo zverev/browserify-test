@@ -1,10 +1,8 @@
-var foo = require('../foo');
-require('../cssUrlsTest');
+var cm = require('../../external/GMXCommonComponents/ComponentsManager');
 var lGmx = require('../../external/Leaflet-GeoMixer');
-
 var L = require('leaflet');
 
-window.addEventListener('load', function() {
+cm.define('leafletProductionIssues', [], function(cm) {
     L.Icon.Default = L.Icon.Default.extend({
         options: {
             iconUrl: 'resources/marker-icon.png',
@@ -25,7 +23,11 @@ window.addEventListener('load', function() {
         }
     });
 
-    var map = window.map = L.map(document.body, {
+    return null;
+});
+
+cm.define('map', ['leafletProductionIssues'], function(cm) {
+    var map = L.map(document.body, {
         center: {
             lat: 49.95121990866206,
             lng: 42.1435546875
@@ -37,11 +39,31 @@ window.addEventListener('load', function() {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    return map;
+});
+
+cm.define('gmxMap', ['map'], function(cm, cb) {
+    var map = cm.get('map');
     lGmx.loadMap('37TYY').then(function(gmxMap) {
         for (var i = 0; i < gmxMap.layers.length; i++) {
             map.addLayer(gmxMap.layers[i]);
         }
+        cb(gmxMap);
     }, function(err) {
         console.error('error', err);
+        cb(false);
+    });
+});
+
+cm.define('globals', ['map', 'gmxMap'], function(cm) {
+    window.cm = cm;
+    window.map = cm.get('map');
+    window.gmxMap = cm.get('gmxMap');
+    return null;
+});
+
+window.addEventListener('load', function() {
+    cm.create().then(function() {
+        console.log('ready');
     });
 });
