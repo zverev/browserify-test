@@ -1,8 +1,30 @@
 var cm = require('../../external/GMXCommonComponents/ComponentsManager');
-var lGmx = require('../../external/Leaflet-GeoMixer');
-var L = require('leaflet');
+
+cm.define('layoutManager', [], function(cm) {
+    var L = require('leaflet');
+
+    var LM = L.Class.extend({
+        initialize: function(options) {
+            var rootEl = options.rootEl;
+            this.mapContainerEl = L.DomUtil.create('div', 'mapContainer', rootEl);
+            this.widgetsContainerEl = L.DomUtil.create('div', 'widgetsContainer', rootEl);
+        },
+        getMapContainer: function() {
+            return this.mapContainerEl;
+        },
+        getLayersTreeContainer: function() {
+            return this.widgetsContainerEl;
+        }
+    });
+
+    return new LM({
+        rootEl: document.body
+    });
+});
 
 cm.define('leafletProductionIssues', [], function(cm) {
+    var L = require('leaflet');
+
     L.Icon.Default = L.Icon.Default.extend({
         options: {
             iconUrl: 'resources/marker-icon.png',
@@ -26,8 +48,11 @@ cm.define('leafletProductionIssues', [], function(cm) {
     return null;
 });
 
-cm.define('map', ['leafletProductionIssues'], function(cm) {
-    var map = L.map(document.body, {
+cm.define('map', ['leafletProductionIssues', 'layoutManager'], function(cm) {
+    var L = require('leaflet');
+    var lm = cm.get('layoutManager');
+
+    var map = L.map(lm.getMapContainer(), {
         center: {
             lat: 49.95121990866206,
             lng: 42.1435546875
@@ -43,7 +68,9 @@ cm.define('map', ['leafletProductionIssues'], function(cm) {
 });
 
 cm.define('gmxMap', ['map'], function(cm, cb) {
+    var lGmx = require('../../external/Leaflet-GeoMixer');
     var map = cm.get('map');
+
     lGmx.loadMap('37TYY').then(function(gmxMap) {
         for (var i = 0; i < gmxMap.layers.length; i++) {
             map.addLayer(gmxMap.layers[i]);
@@ -55,10 +82,23 @@ cm.define('gmxMap', ['map'], function(cm, cb) {
     });
 });
 
-cm.define('globals', ['map', 'gmxMap'], function(cm) {
+cm.define('rawTree', ['gmxMap'], function(cm) {
+    return cm.get('gmxMap').rawTree;
+});
+
+cm.define('layersTree', ['rawTree'], function(cm) {
+    var LayersTreeNode = require('../../external/GMXCommonComponents/LayersTree');
+    var rawTree = cm.get('rawTree');
+
+    return new LayersTreeNode({
+        content: rawTree
+    });
+});
+
+cm.define('globals', ['map', 'layersTree'], function(cm) {
     window.cm = cm;
     window.map = cm.get('map');
-    window.gmxMap = cm.get('gmxMap');
+    window.lt = cm.get('layersTree');
     return null;
 });
 

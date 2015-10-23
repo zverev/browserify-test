@@ -5,6 +5,20 @@ html, body {
     margin: 0;
 }
 
+.mapContainer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }
+
+.widgetsContainer { 
+    position: absolute; 
+    top: 10px; 
+    right: 10px; 
+    bottom: 40px; 
+    width: 300px;
+    z-index: 2; 
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.5);
+}
+
 .leaflet-container {
     background-image: url('tiny_grid.png')
 }
