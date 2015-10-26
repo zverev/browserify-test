@@ -1,4 +1,4 @@
-var cm = require('../../external/GMXCommonComponents/ComponentsManager');
+var cm = require('gmx-common-components/ComponentsManager');
 
 cm.define('layoutManager', [], function(cm) {
     var L = require('leaflet');
@@ -68,7 +68,7 @@ cm.define('map', ['leafletProductionIssues', 'layoutManager'], function(cm) {
 });
 
 cm.define('gmxMap', ['map'], function(cm, cb) {
-    var lGmx = require('../../external/Leaflet-GeoMixer');
+    var lGmx = require('leaflet-geomixer');
     var map = cm.get('map');
 
     lGmx.loadMap('37TYY').then(function(gmxMap) {
@@ -93,6 +93,25 @@ cm.define('layersTree', ['rawTree'], function(cm) {
     return new LayersTreeNode({
         content: rawTree
     });
+});
+
+cm.define('layersTreeWidget', ['layersTree', 'layoutManager'], function(cm) {
+    var GmxWidget = require('gmx-common-components/GmxWidget');
+    var layersTree = cm.get('layersTree');
+    var layoutManager = cm.get('layoutManager');
+    var $ = require('jquery');
+
+    var MyWidget = GmxWidget.extend({
+        el: $('<div>'),
+        initialize: function() {
+            this.$el.html('hello world');
+        }
+    });
+
+    var wgt = new MyWidget();
+    wgt.appendTo(layoutManager.getLayersTreeContainer());
+
+    return null;
 });
 
 cm.define('globals', ['map', 'layersTree'], function(cm) {

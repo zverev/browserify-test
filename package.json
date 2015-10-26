@@ -13,10 +13,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "gmx-common-components": "file:external\\GMXCommonComponents",
         "jquery": "^2.1.4",
-        "leaflet": "0.7.5"
+        "leaflet": "0.7.5",
+        "leaflet-geomixer": "file:external\\Leaflet-GeoMixer"
     },
     "devDependencies": {
+        "gmx-builder": "file:builder",
         "gulp": "^3.9.0"
     }
 }
