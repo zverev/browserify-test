@@ -4,8 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "watchify ./app/entry.js -v -o dist/bundle.js -p [ parcelify -wo dist/bundle.css ]"
+        "postinstall": "gulp"
     },
     "style": [
         "./node_modules/leaflet/dist/leaflet.css"
