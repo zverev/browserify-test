@@ -75,7 +75,15 @@ module.exports = function(gulp, options) {
         getCssAssets(browserifyFactory(options), function(cssFilesPaths) {
             var urlsStreams = cssFilesPaths.map(function(cssFilePath) {
                 return gulp.src(cssFilePath)
-                    .pipe(gulpFileAssets())
+                    .pipe(gulpFileAssets({
+                        types: {
+                            js: ['js'],
+                            css: ['css'],
+                            page: ['html', 'tpl'],
+                            img: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
+                            fonts: ['eot', 'woff', 'ttf']
+                        }
+                    }))
                     .pipe(gulpRename(function(pth) {
                         pth.dirname = path.relative(
                             options.cwd,
