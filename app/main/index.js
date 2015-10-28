@@ -72,14 +72,15 @@ cm.define('gmxMap', ['map'], function(cm, cb) {
     var map = cm.get('map');
 
     lGmx.loadMap('37TYY').then(function(gmxMap) {
-        for (var i = 0; i < gmxMap.layers.length; i++) {
-            map.addLayer(gmxMap.layers[i]);
-        }
         cb(gmxMap);
     }, function(err) {
         console.error('error', err);
         cb(false);
     });
+});
+
+cm.define('layersHash', ['gmxMap'], function(cm) {
+    return cm.get('gmxMap').layersByID;
 });
 
 cm.define('rawTree', ['gmxMap'], function(cm) {
@@ -95,23 +96,47 @@ cm.define('layersTree', ['rawTree'], function(cm) {
     });
 });
 
+cm.define('layersMapper', ['map', 'layersHash', 'layersTree'], function(cm) {
+    var map = cm.get('map');
+    var layersHash = cm.get('layersHash');
+    var layersTree = cm.get('layersTree');
+
+    layersTree.on('childChange', function(model) {
+        if (model.changedAttributes().hasOwnProperty('visible')) {
+            var id = model.get('properties').LayerID || model.get('properties').GroupID;
+            if (model.changedAttributes().visible) {
+                layersHash[id] && map.addLayer(layersHash[id]);
+            } else {
+                layersHash[id] && map.removeLayer(layersHash[id]);
+            }
+        }
+    });
+
+    layersTree.eachNode(function(model) {
+        var id = model.get('properties').LayerID;
+        if (model.get('visible')) {
+            layersHash[id] && map.addLayer(layersHash[id]);
+        }
+        layersHash[id].setDateInterval && layersHash[id].setDateInterval(Date.now() - 36 * 60 * 60 * 1000, Date.now());
+    }, true);
+
+    return null;
+});
+
 cm.define('layersTreeWidget', ['layersTree', 'layoutManager'], function(cm) {
     var GmxWidget = require('gmx-common-components/GmxWidget');
+    var LayersTreeWidget = require('gmx-common-components/LayersTreeWidget');
     var layersTree = cm.get('layersTree');
     var layoutManager = cm.get('layoutManager');
     var $ = require('jquery');
 
-    var MyWidget = GmxWidget.extend({
-        el: $('<div>'),
-        initialize: function() {
-            this.$el.html('hello world');
-        }
+    var layersTreeWidget = new LayersTreeWidget({
+        layersTree: layersTree
     });
 
-    var wgt = new MyWidget();
-    wgt.appendTo(layoutManager.getLayersTreeContainer());
+    layersTreeWidget.appendTo(layoutManager.getLayersTreeContainer());
 
-    return null;
+    return layersTreeWidget;
 });
 
 cm.define('globals', ['map', 'layersTree'], function(cm) {
