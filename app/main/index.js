@@ -103,7 +103,7 @@ cm.define('layersMapper', ['map', 'layersHash', 'layersTree'], function(cm) {
 
     layersTree.on('childChange', function(model) {
         if (model.changedAttributes().hasOwnProperty('visible')) {
-            var id = model.get('properties').LayerID || model.get('properties').GroupID;
+            var id = model.get('properties').name;
             if (model.changedAttributes().visible) {
                 layersHash[id] && map.addLayer(layersHash[id]);
             } else {
@@ -113,7 +113,7 @@ cm.define('layersMapper', ['map', 'layersHash', 'layersTree'], function(cm) {
     });
 
     layersTree.eachNode(function(model) {
-        var id = model.get('properties').LayerID;
+        var id = model.get('properties').name;
         if (model.get('visible')) {
             layersHash[id] && map.addLayer(layersHash[id]);
         }
