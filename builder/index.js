@@ -3,6 +3,7 @@
 var vinylSourceStream = require('vinyl-source-stream');
 var browserify = require('browserify');
 var parcelMap = require('parcel-map');
+var exorcist = require('exorcist');
 var watchify = require('watchify');
 var gutil = require('gulp-util');
 var path = require('path');
@@ -61,6 +62,7 @@ module.exports = function(gulp, options) {
                 .on('error', function() {
                     gutil.log('error')
                 })
+                .pipe(exorcist('./dist/bundle.js.map'))
                 .pipe(vinylSourceStream('bundle.js'))
                 .pipe(gulp.dest('./dist'));
         }
