@@ -18,7 +18,7 @@
         "leaflet-geomixer": "file:external\\Leaflet-GeoMixer"
     },
     "devDependencies": {
-        "gmx-builder": "file:builder",
+        "gmx-builder": "zverev/builderV2",
         "gulp": "^3.9.0"
     }
 }
