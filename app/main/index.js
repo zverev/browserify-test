@@ -88,7 +88,7 @@ cm.define('rawTree', ['gmxMap'], function(cm) {
 });
 
 cm.define('layersTree', ['rawTree'], function(cm) {
-    var LayersTreeNode = require('../../external/GMXCommonComponents/LayersTree');
+    var LayersTreeNode = require('gmx-common-components/LayersTree');
     var rawTree = cm.get('rawTree');
 
     return new LayersTreeNode({
