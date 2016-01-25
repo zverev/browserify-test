@@ -1,3 +1,6 @@
 [submodule "external/GMXCommonComponents"]
 	path = external/GMXCommonComponents
 	url = git@github.com:Scanex/GMXCommonComponents.git
+[submodule "external/Leaflet-GeoMixer"]
+	path = external/Leaflet-GeoMixer
+	url = git@github.com:ScanEx/Leaflet-GeoMixer.git
