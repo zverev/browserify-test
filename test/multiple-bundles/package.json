@@ -1,0 +1,10 @@
+{
+  "name": "multiple-bundles-test",
+  "devDependencies": {
+    "gmx-builder": "zverev/builderV2",
+    "gulp": "^3.9.0"
+  },
+  "dependencies": {
+    "is-positive": "^3.1.0"
+  }
+}
