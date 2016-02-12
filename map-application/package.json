@@ -1,0 +1,25 @@
+{
+  "name": "browserify-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/map-app/index.js",
+  "scripts": {
+    "postinstall": "gulp"
+  },
+  "style": [
+    "./node_modules/leaflet/dist/leaflet.css"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gmx-common-components": "file:external\\GMXCommonComponents",
+    "gulp": "^3.9.1",
+    "jquery": "^2.1.4",
+    "leaflet": "0.7.5",
+    "leaflet-geomixer": "file:external\\Leaflet-GeoMixer"
+  },
+  "devDependencies": {
+    "gmx-builder": "zverev/builderV2",
+    "gulp": "^3.9.0"
+  }
+}

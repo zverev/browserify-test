@@ -1,6 +1,9 @@
-[submodule "external/GMXCommonComponents"]
-	path = external/GMXCommonComponents
-	url = git@github.com:Scanex/GMXCommonComponents.git
-[submodule "external/Leaflet-GeoMixer"]
-	path = external/Leaflet-GeoMixer
+[submodule "map-application/app"]
+	path = map-application/app
+	url = git@github.com:zverev/builder-test-app.git
+[submodule "map-application/external/Leaflet-GeoMixer"]
+	path = map-application/external/Leaflet-GeoMixer
 	url = git@github.com:ScanEx/Leaflet-GeoMixer.git
+[submodule "map-application/external/GMXCommonComponents"]
+	path = map-application/external/GMXCommonComponents
+	url = git@github.com:ScanEx/GMXCommonComponents.git
