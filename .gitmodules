@@ -7,3 +7,6 @@
 [submodule "map-application/external/GMXCommonComponents"]
 	path = map-application/external/GMXCommonComponents
 	url = git@github.com:ScanEx/GMXCommonComponents.git
+[submodule "symlinks/external/GMXCommonComponents"]
+	path = symlinks/external/GMXCommonComponents
+	url = git@github.com:ScanEx/GMXCommonComponents.git
