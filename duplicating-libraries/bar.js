@@ -1,2 +1,3 @@
 var isEmpty = require('is-empty');
-module.exports = 'bar';
+var myLib = require('my-lib');
+module.exports = 'bar ' + myLib;
