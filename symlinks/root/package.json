@@ -5,6 +5,6 @@
     "gulp": "^3.9.0"
   },
   "dependencies": {
-      "gmx-common-components": "file:external\\GMXCommonComponents"
+      "gmx-common-components": "file:..\\external\\GMXCommonComponents"
   }
 }

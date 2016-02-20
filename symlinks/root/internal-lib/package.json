@@ -1,0 +1,14 @@
+{
+  "name": "external-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "style": [
+    "./styles.css"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
